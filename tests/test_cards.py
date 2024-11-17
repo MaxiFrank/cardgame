@@ -23,7 +23,8 @@ def test_deck_has_been_shuffle():
     pre_shuffled_cards = deck.cards[:]
     deck.shuffle()
     assert len(deck.cards) == 52
-    assert pre_shuffled_cards != deck.cards
+    assert set(pre_shuffled_cards) == set(deck.cards)
+    assert (pre_shuffled_cards == deck.cards) is False
 
 
 def test_draw_from_deck():
