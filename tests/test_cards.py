@@ -6,22 +6,24 @@ import pytest
 from card_game import card
 
 
-def test_deck_has_12_cards():
+def test_deck_has_52_cards():
     """
-    Tests that the deck has 12 cards when initialized.
+    Tests that the deck has 53 cards when initialized.
     """
     deck = card.Deck()
     assert deck.cards is not None
-    assert len(deck.cards) == 12
+    assert len(deck.cards) == 52
 
 
 def test_deck_has_been_shuffle():
     """
-    Tests that after shuffling cards in a deck in place, there are still 12 cards.
+    Tests that after shuffling cards in a deck in place, there are still 53 cards.
     """
     deck = card.Deck()
+    pre_shuffled_cards = deck.cards[:]
     deck.shuffle()
-    assert len(deck.cards) == 12
+    assert len(deck.cards) == 52
+    assert pre_shuffled_cards != deck.cards
 
 
 def test_draw_from_deck():
@@ -30,7 +32,11 @@ def test_draw_from_deck():
     """
     deck = card.Deck()
     next_draw = deck.draw()
-    assert isinstance(next_draw, int)
+    suit = next_draw[0]
+    number = next_draw[1]
+    assert isinstance(next_draw, tuple)
+    assert isinstance(suit, str)
+    assert isinstance(number, int)
 
 
 def test_draw_from_empty_deck():
