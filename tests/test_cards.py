@@ -55,6 +55,7 @@ def test_draw_from_empty_deck():
         deck.draw()
 
 
+# TODO: rewrite tests for players
 def test_number_of_players():
     """
     Tests that there are two players in this game
