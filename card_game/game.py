@@ -4,7 +4,7 @@ Constructs the Game class.
 Makes the Game class
 """
 
-from typing import Optional
+from typing import Optional, List
 
 from card_game.rule import Rule
 from card_game.card import Deck
@@ -16,23 +16,36 @@ class Game:
     Class to make a game out of cards.
     """
 
-    def __init__(self, rule: type[Rule], deck: type[Deck], num_players: int) -> None:
+    def __init__(
+        self,
+        rule: type[Rule],
+        deck: type[Deck],
+        num_players: int,
+        cards_on_table: Optional[List[tuple[str, int]]] = None,
+    ) -> None:
         self.rule = rule
         self.deck = deck
-        self.players = Player(num_players)
+        self.players = list(Player() for _ in range(len(num_players)))
+        # should cards_on_table be an attribute of Game or a part of Rule
+        if cards_on_table is None:
+            self.cards_on_table = cards_on_table
+        else:
+            cards_on_table = self.cards_on_table
 
     def __repr__(self) -> str:
-        return f"Game(rule='{self.rule}', deck='{self.deck}', players='{self.players}')"
+        return f"Game(rule='{self.rule}', deck='{self.deck}', players='{self.players}',
+        cards_on_table='{self.cards_on_table})"
 
     def play_a_hand(self) -> None:
         """
-        Play until a player wins.
+        Play a hand, the hand ends when a player wins or when there are
+        no more available cards.
         """
         self.rule().deal()
-        current_player: Optional[int] = None
-        while not self.rule().end_of_hand():
-            self.rule().turn(current_player)
-            current_player = self.players.get_next_player()
+        current_player = 0
+        while current_player < len(self.players) and (not self.rule().end_of_hand()):
+            self.rule().turn(self.players[current_player])
+            current_player += 1
         self.rule().score()
 
     def play_a_game(self) -> None:
