@@ -24,8 +24,8 @@ class Game:
         cards_on_table: Optional[List[tuple[str, int]]] = None,
     ) -> None:
         self.rule = rule
-        self.deck = deck
-        self.players = list(Player() for _ in range(len(num_players)))
+        self.deck = deck()
+        self.players = list(Player() for _ in range(num_players))
         # should cards_on_table be an attribute of Game or a part of Rule
         if cards_on_table is None:
             self.cards_on_table = cards_on_table
@@ -33,26 +33,27 @@ class Game:
             cards_on_table = self.cards_on_table
 
     def __repr__(self) -> str:
-        return f"Game(rule='{self.rule}', deck='{self.deck}', players='{self.players}',
-        cards_on_table='{self.cards_on_table})"
+        return f"Game(rule='{self.rule}', \ndeck='{self.deck}', \nplayers='{self.players}',\ncards_on_table='{self.cards_on_table})"
 
     def play_a_hand(self) -> None:
         """
         Play a hand, the hand ends when a player wins or when there are
         no more available cards.
         """
-        self.rule().deal()
+        self.rule().deal(players=self.players, cards=self.deck.cards)
         current_player = 0
-        while current_player < len(self.players) and (not self.rule().end_of_hand()):
-            self.rule().turn(self.players[current_player])
+        while current_player < len(self.players) and (
+            not self.rule().end_of_hand(cards=self.deck.cards, players=self.players)
+        ):
+            self.rule().turn(self.players[current_player], self.deck.cards.pop(0))
             current_player += 1
-        self.rule().score()
+        self.rule().score(self.players)
 
     def play_a_game(self) -> None:
         """
         Play hands consecutively. In Rummy, it would be when 500 points is reached.
         """
-        while not self.rule().end_of_game():
+        while not self.rule().end_of_game(self.players):
             self.play_a_hand()
 
 

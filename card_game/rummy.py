@@ -23,17 +23,22 @@ class Rummy(Rule):
         """
         Deal 13 cards per player. Limit to 13 cards.
         """
-        for player in players:
-            card_dealt = cards.pop(0)
-            player.cards.append(card_dealt)
+        dealt_cards = 0
+        while dealt_cards < 13:
+            for player in players:
+                # issue: pop from an empty list, need to check if there's any cards in cards...
+                # consider using the end_of_game method
+                card_dealt = cards.pop(0)
+                player.cards.append(card_dealt)
+            dealt_cards += 1
 
-    def end_of_hand(self, deck: type[Deck], players: type[Player]) -> bool:
+    def end_of_hand(self, cards: List[tuple[str, int]], players: type[Player]) -> bool:
         """
         Returns true if a player has won a hand
         A player has won when there's no more available cards
         or when a player has no cards in their hands after a turn
         """
-        if len(deck.cards) == 0 or not all([len(player.cards) for player in players]):
+        if (len(cards) == 0) or (not all([len(player.cards) for player in players])):
             return True
 
     def end_of_game(self, players: type[Player]) -> bool:
@@ -74,13 +79,17 @@ class Rummy(Rule):
 
         """
         # TODO: do scenario 1
+
+        # Notes for scenario 2
+        # this is where I put in the rules for same number, different suits and same suit, consecutive numbers.
+        # when the player takes a turn, if they want to play certain cards, namely put them down in the player.cards_played
+        # This function will either let them do it or not.
+        # Regardless of whether a player puts cards down for scoring later, the player needs to put a card into the discard pile
+
+        # player draws a card first
         player.cards.append(card_drawn)
 
-        # loop waiting for players to put down cards.
-        # if self.put_down_cards(cards):
-        #     player.cards.pop()
-
-    def calculate_card_value(self, cards: List[str, int]) -> int:
+    def calculate_card_value(self, cards: List[tuple[str, int]]) -> int:
         "Calculate points for a list of cards"
         total = 0
         for card in cards:

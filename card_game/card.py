@@ -16,8 +16,8 @@ class Deck:
     """
 
     def __init__(self) -> None:
-        self.suits: List = ["Hearts", "Diamonds", "Clubs", "Spades"]
-        self.cards: List = []
+        self.suits: List[str] = ["Hearts", "Diamonds", "Clubs", "Spades"]
+        self.cards: List[tuple[str, int]] = []
         for suit in self.suits:
             for num in list(range(1, 14)):
                 self.cards.append((suit, num))
