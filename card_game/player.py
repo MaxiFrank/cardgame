@@ -17,8 +17,8 @@ class Player:
 
     def __init__(
         self,
-        cards: Optional[List[int]] = None,
-        cards_played: Optional[List[int]] = None,
+        cards: Optional[List[tuple[str, int]]] = None,
+        cards_played: Optional[List[tuple[str, int]]] = None,
         score: int = 0,
     ) -> None:
 
