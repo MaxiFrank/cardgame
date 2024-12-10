@@ -35,9 +35,10 @@ class Player:
         self.score = score
 
     def __repr__(self) -> str:
-        return f"Player(cards='{self.cards}', cards_played='{self.cards_played}', score='{self.score}')"
+        return f"Player(cards='{self.cards}', cards_played='{self.cards_played}', \
+             score='{self.score}')"
 
 
 if __name__ == "__main__":
-    players = Player(3)
+    players = Player()
     print(players)
