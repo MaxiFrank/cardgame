@@ -1,5 +1,8 @@
+"""
+Main file that runs the game
+"""
+
 from card_game import card, game, rummy
-from pprint import pp
 
 
 if __name__ == "__main__":
