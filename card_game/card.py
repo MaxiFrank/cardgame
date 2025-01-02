@@ -31,7 +31,7 @@ class Deck:
         """
         shuffle(self.cards)
 
-    def draw(self) -> int:
+    def draw(self) -> tuple[str, int]:
         """
         Draws a card from deck, throws IndexError is cards in deck is empty.
         """

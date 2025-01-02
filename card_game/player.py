@@ -4,9 +4,11 @@ Constructs the Player class.
 Makes the Play class
 """
 
-from typing import Optional, List
+from typing import List
+from dataclasses import dataclass, field
 
 
+@dataclass
 class Player:
     """
     Class to make a player for a game, takes arguments:
@@ -15,28 +17,9 @@ class Player:
     score: score of the cards on the table
     """
 
-    def __init__(
-        self,
-        cards: Optional[List[tuple[str, int]]] = None,
-        cards_played: Optional[List[tuple[str, int]]] = None,
-        score: int = 0,
-    ) -> None:
-
-        if cards is None:
-            self.cards = []
-        else:
-            self.cards = cards
-
-        if cards_played is None:
-            self.cards_played = []
-        else:
-            self.cards_played = self.cards_played
-
-        self.score = score
-
-    def __repr__(self) -> str:
-        return f"Player(cards='{self.cards}', cards_played='{self.cards_played}', \
-             score='{self.score}')"
+    cards: List[tuple[str, int]] = field(default_factory=list)
+    cards_played: List[tuple[str, int]] = field(default_factory=list)
+    score: int = 0
 
 
 if __name__ == "__main__":

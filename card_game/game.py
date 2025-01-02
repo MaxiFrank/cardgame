@@ -28,7 +28,9 @@ class Game:
         self.rule = rule
         self.deck = deck
         # players are consistent through out a game.
-        self.players = list(Player() for _ in range(num_players))
+        self.players = list(
+            Player(cards=[], cards_played=[]) for _ in range(num_players)
+        )
         # should cards_on_table be an attribute of Game or a part of Rule
         if cards_on_table is None:
             self.cards_on_table = cards_on_table
