@@ -34,7 +34,7 @@ def test_valid_set():
     # Comparison 'rummy.set(cards) == True' should be 'rummy.set(cards) is True' if checking for
     # the singleton value True, or 'rummy.set(cards)' if testing for truthiness
     # (singleton-comparison)
-    assert rummy.set(cards) is True
+    assert rummy.set(cards)
 
 
 def test_invalid_set_too_few_cards():
@@ -92,6 +92,6 @@ def test_invalid_run_not_same_suit():
     assert rummy.run(cards) is False
 
 
-# TODO:need to do a bunch of patches and mocks here so I can test
+# TODO: need to do a bunch of patches and mocks here so I can test
 # player already has a set or a run, player needs the drawn card to have a set or a run, \
-# player doesn't have a set or a run even with the card drawn...
+# player doesn't have a set or a run even with the card drawn
