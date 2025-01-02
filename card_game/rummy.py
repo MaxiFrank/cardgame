@@ -18,9 +18,7 @@ class Rummy(Rule):
     in their play, then discard a card
     """
 
-    def deal(
-        self, players: List[type[Player]], cards: List[tuple[str, int]]
-    ) -> None:
+    def deal(self, players: List[Player], cards: List[tuple[str, int]]) -> None:
         """
         Deal 13 cards per player. Limit to 13 cards.
         """
@@ -34,22 +32,20 @@ class Rummy(Rule):
             dealt_cards += 1
 
     def end_of_hand(
-        self, cards: List[tuple[str, int]], players: List[type[Player]]
+        self, cards: List[tuple[str, int]], players: List[Player]
     ) -> bool:
         """
         Returns true if a player has won a hand
         A player has won when there's no more available cards
         or when a player has no cards in their hands after a turn
         """
-        # players_cards = (len(player.cards) for player in players)
         if (len(cards) == 0) or (
-            # next(players_cards)== 0, why is a generator better?
-            not all([len(player.cards) for player in players])
+            not all(len(player.cards) for player in players)
         ):
             return True
         return False
 
-    def end_of_game(self, players: List[type[Player]]) -> bool:
+    def end_of_game(self, players: List[Player]) -> bool:
         """
         Returns true if a play has won a game
         Game is won when any player gets 500 or more points
@@ -59,7 +55,7 @@ class Rummy(Rule):
                 return True
         return False
 
-    def put_down_cards(self, player: type[Player]):
+    def put_down_cards(self, player: Player):
         """
         Player can put down cards that are qualified. The qualified cards are:
         same number but different suit
@@ -103,8 +99,9 @@ class Rummy(Rule):
         """
         A set of three or more sequential cards of the same suit
         """
+        print("cards in run ", cards)
         suits = [card[0] for card in cards]
-        print(suits)
+        print("suits are ", suits)
         ranks = [int(card[1]) for card in cards]
 
         return (
@@ -113,21 +110,7 @@ class Rummy(Rule):
             and (len(cards) >= 3)
         )
 
-    def parse_tuple_string(self, string: str) -> tuple[str, str]:
-        """
-        Parse tuple that represents a card, return the suit: str and card: str
-        """
-        suit = ""
-        rank = ""
-        for char in string:
-            if char.isalpha():
-                suit += char
-            elif char.isnumeric():
-                rank += str(char)
-            continue
-        return suit, rank
-
-    def turn(self, player: type[Player], card_drawn: tuple[str, int]) -> None:
+    def turn(self, player: Player, card_drawn: tuple[str, int]) -> None:
         """
         player plays a turn:
         1) pick up cards from where the player wants to pick up,
@@ -156,22 +139,28 @@ class Rummy(Rule):
         put_cards_down = input("Do you want to put down any cards?\n")
         if put_cards_down == "yes":
             cards_to_put_down = input("What cards do you want to put down?\n")
-            if self.run(cards=cards_to_put_down) or self.set(
-                cards=cards_to_put_down
+            # I get "(),(),()" back here
+            print("cards to put down ", eval((cards_to_put_down)))
+            print(self.run(cards=list(eval(cards_to_put_down))))
+            print(self.set(cards=list(eval(cards_to_put_down))))
+            if self.run(cards=list(eval(cards_to_put_down))) or self.set(
+                cards=list(eval(cards_to_put_down))
             ):
-                player.cards_played.extend(cards_to_put_down)
+                player.cards_played.extend(list(eval(cards_to_put_down)))
                 remaining_cards = [
                     card
                     for card in player.cards
-                    if card not in cards_to_put_down
+                    if card not in list(eval(cards_to_put_down))
                 ]
                 player.cards = remaining_cards
-
+        print("player after trying to discard cards", player)
         # Mandatory to remove a card from the cards in a player's hand
         card_to_discard = input("What card will you discard?\n")
-        suit, rank = self.parse_tuple_string(card_to_discard)
+        # TODO: Remove eval prior to production
+        suit, rank = eval(card_to_discard)
         try:
             player.cards.remove(tuple((suit, int(rank))))
+            print("current player after removing cards", player)
         except ValueError as err:
             print(err.args)
 
@@ -185,7 +174,7 @@ class Rummy(Rule):
                 total += card[1]
         return total
 
-    def score(self, players: List[type[Player]]) -> List[int]:
+    def score(self, players: List[Player]) -> List[int]:
         """
         Note this scores for all players.
 
